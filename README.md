@@ -1,26 +1,28 @@
 # wireguard
 ## 利用方法
-鍵を生成するためにパッケージインストール
+パッケージインストール
 ```
-sudo apt install wireguard
+$ sudo apt install wireguard
 ```
-クライアント用の鍵生成
+クライアント用の鍵生成と権限の変更
 ```
-wg genkey | tee client.key | wg pubkey > client.pub
+$ wg genkey | tee client.key | wg pubkey > client.pub
+$ chmod 600 client.pub
 ```
 サーバ用の鍵生成
 ```
 wg genkey | tee server.key | wg pubkey > server.pub
+$ chmod 600 server.pub
 ```
 
 以下のようなconfig.confを作成
 ```
 [Interface]
 ListenPort = 51820
-PrivateKey = #Server Key
+PrivateKey = # Server Key
 
 [Peer]
-PublicKey = #Client Pub Key
+PublicKey = # Client Pub Key
 AllowedIPs = 10.0.0.2/24 # ルーティングするIPレンジ
 ```
 
@@ -44,6 +46,9 @@ $ docker-compose ps
 -------------------------------------------------------------------------------------------------
 wireguard   /bin/bash -c ./setup.sh && ...   Up      0.0.0.0:51820->51820/tcp,:::51820->51820/tcp
 ```
-
+ufwでポート番号を許可する
+```
+$ sudo ufw allow 51820/udp
+```
 ## 参考
 [公式](https://www.wireguard.com/)
