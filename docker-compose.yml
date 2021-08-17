@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  app:
+    build: .
+    container_name: "wireguard"
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 51820:51820
+    restart: always
+    tty: true
+    command: /bin/bash -c "./setup.sh && /bin/bash"
