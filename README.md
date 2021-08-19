@@ -2,7 +2,7 @@
 ## 利用方法
 パッケージインストール
 ```
-$ sudo apt install wireguard
+$ sudo apt install -y qrencode wireguard
 ```
 クライアント用の鍵生成と権限の変更
 ```
@@ -46,9 +46,27 @@ $ docker-compose ps
 -------------------------------------------------------------------------------------------------
 wireguard   /bin/bash -c ./setup.sh && ...   Up      0.0.0.0:51820->51820/tcp,:::51820->51820/tcp
 ```
-ufwでポート番号を許可する
+ufwを利用している場合、wireguradで利用するポート番号を許可する
 ```
 $ sudo ufw allow 51820/udp
+$ sudo ufw reload
 ```
+クライアントの設定
+スマホの場合
+以下のコマンドで設定用のQRコードを生成し、スマホで読み込む
+```
+qrencode -t ansiutf8 < client.conf
+```
+
+PCの場合
+client.confをクライアント用のPCに移動
+```
+$ mv client.conf /etc/wireguard/wg0.conf
+```
+wireguard起動
+```
+$ wg-quick up wg0
+```
+
 ## 参考
 [公式](https://www.wireguard.com/)
